@@ -1,0 +1,56 @@
+# Entorno virtual
+venv/
+env/
+.venv/
+.python-version
+
+
+# Instrucciones para Gemini
+GEMINI.md
+
+# cache de python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.pyre/
+.mypy_cache/
+.dmypy.json
+.pytype/
+.pyright/
+
+# Artefactos de empaquetado y distribución
+build/
+dist/
+*.egg
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Cobertura y reportes
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Logs y archivos temporales
+*.log
+*.tmp
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+
+# Bases de datos SQLite generadas localmente
+*.db
+*.sqlite
+*.sqlite3
+
+# Directorios de IDE/Editor
+.vscode/
+.idea/
+
+# Caches de herramientas
+.ruff_cache/
+.hypothesis/
