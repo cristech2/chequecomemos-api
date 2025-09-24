@@ -1,19 +1,25 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v6.0.0
   hooks:
   - id: check-yaml
   - id: end-of-file-fixer
   - id: trailing-whitespace
+  - id: check-json
+  - id: detect-private-key
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.5.0
+  rev: v0.13.1
   hooks:
   - id: ruff
     args: [--fix]
   - id: ruff-format
-- hooks:
-  - id: commitizen
-    stages:
-    - commit-msg
-  repo: https://github.com/commitizen-tools/commitizen
-  rev: v3.27.0 # Versión más reciente con mejoras
+- repo: https://github.com/commitizen-tools/commitizen
+  rev: v4.9.1
+  hooks:
+    - id: commitizen
+      stages: [commit-msg]
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.8.6
+  hooks:
+    - id: bandit
+      args: ["-r", "app/"]
