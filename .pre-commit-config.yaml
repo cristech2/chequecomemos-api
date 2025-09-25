@@ -1,25 +1,30 @@
+# Configuración de hooks de pre-commit para validar calidad y seguridad antes de cada commit.
 repos:
+  # Hooks de utilidades generales que vienen incluidos con pre-commit.
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
   hooks:
-  - id: check-yaml
-  - id: end-of-file-fixer
-  - id: trailing-whitespace
-  - id: check-json
-  - id: detect-private-key
+  - id: check-yaml  # Valida que los archivos YAML tengan sintaxis correcta.
+  - id: end-of-file-fixer  # Asegura salto de línea al final de cada archivo.
+  - id: trailing-whitespace  # Elimina espacios en blanco al final de las líneas.
+  - id: check-json  # Confirma que los archivos JSON sean válidos.
+  - id: detect-private-key  # Previene incluir claves privadas accidentales.
+  # Integración con ruff para linting y formateo de código Python.
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.13.1
   hooks:
-  - id: ruff
+  - id: ruff  # Ejecuta ruff y aplica fixes automáticos cuando es posible.
     args: [--fix]
-  - id: ruff-format
+  - id: ruff-format  # Da formato al código al estilo ruff-format.
+  # Validación del formato de mensajes de commit con Commitizen.
 - repo: https://github.com/commitizen-tools/commitizen
   rev: v4.9.1
   hooks:
-    - id: commitizen
+    - id: commitizen  # Revisa que los mensajes cumplan Conventional Commits.
       stages: [commit-msg]
+  # Escaneo de seguridad con Bandit sobre el código de la carpeta app/.
 - repo: https://github.com/PyCQA/bandit
   rev: 1.8.6
   hooks:
-    - id: bandit
+    - id: bandit  # Busca patrones inseguros en el código Python.
       args: ["-r", "app/"]
