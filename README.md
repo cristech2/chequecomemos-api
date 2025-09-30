@@ -20,26 +20,13 @@ Permite gestionar **recetas**, **planificación semanal**, **inventario** y la *
 - [Python 3.12+](https://www.python.org/)
 - [Uvicorn](https://www.uvicorn.org/) – servidor ASGI
 - [SQLite] – base de datos predeterminada para MVP (local, simple y portable)
+- [SQLAlchemy](https://www.sqlalchemy.org/) – ORM para gestionar la capa de datos
+- [Alembic](https://alembic.sqlalchemy.org/) – migraciones de esquema versionadas
 - [Docker] (opcional, para despliegue)
 
 ---
 
-## 📂 Estructura (propuesta)
-
-```python
-backend/
-│── app/
-│   ├── main.py          # Punto de entrada FastAPI
-│   ├── models/          # Definición ORM
-│   ├── routers/         # Endpoints agrupados
-│   ├── schemas/         # Pydantic
-│   └── services/        # Lógica de negocio
-│── tests/               # Pruebas unitarias
-│── requirements.txt
-│── README.md
-```
-
----
+## 📂 Estructura a definir, priorizando el desarrollo solamente por mi
 
 ## 📅 Endpoints (MVP)
 
