@@ -1,0 +1,148 @@
+Project "Che, ¿qué comemos? – MVP (Catálogo global + overlays usuario)" {
+  database_type: "SQLite"
+  note: "Recetas/ingredientes globales compartibles; plan/inventario por usuario; lista de compras derivada en servicios"
+}
+
+/* ===== Enums ===== */
+Enum meal_type {
+  lunch
+  dinner
+}
+
+Enum recipe_visibility {
+  public
+  unlisted
+  private
+}
+
+/* ===== Usuarios ===== */
+Table users {
+  id           integer  [pk, increment]
+  email        text     [not null, unique]
+  family_name  text
+  created_at   datetime [default: `CURRENT_TIMESTAMP`]
+  updated_at   datetime [default: `CURRENT_TIMESTAMP`]
+}
+
+/* ===== Catálogo global ===== */
+Table ingredients {
+  id           integer [pk, increment]
+  name         text    [not null, unique]
+  category     text
+  default_unit text
+
+  Indexes {
+    category
+  }
+}
+
+Table recipes {
+  id               integer            [pk, increment]
+  owner_user_id    integer            [ref: > users.id]    // autor (nullable si son recetas del sistema)
+  name             text               [not null]
+  description      text
+  instructions     text
+  servings_default integer            [not null, default: 1]
+  prep_minutes     integer
+  cook_minutes     integer
+  visibility       recipe_visibility  [not null, default: 'public']
+  created_at       datetime           [default: `CURRENT_TIMESTAMP`]
+  updated_at       datetime           [default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    owner_user_id
+    visibility
+    name
+  }
+}
+
+Table recipe_ingredients {
+  id            integer [pk, increment]
+  recipe_id     integer [not null, ref: > recipes.id]
+  ingredient_id integer [not null, ref: > ingredients.id]
+  quantity      real
+  unit          text
+  optional      boolean [default: false]
+  position      integer
+
+  Indexes {
+    recipe_id
+    ingredient_id
+    (recipe_id, ingredient_id) [unique]
+  }
+}
+
+/* ===== Overlays/estado por usuario ===== */
+Table user_saved_recipes {
+  id              integer [pk, increment]
+  user_id         integer [not null, ref: > users.id]
+  recipe_id       integer [not null, ref: > recipes.id]
+  custom_name     text
+  custom_servings integer
+  pinned          boolean [default: false]
+  notes           text
+  created_at      datetime [default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    user_id
+    (user_id, recipe_id) [unique]
+  }
+}
+
+Table user_ingredient_aliases {
+  id            integer [pk, increment]
+  user_id       integer [not null, ref: > users.id]
+  ingredient_id integer [not null, ref: > ingredients.id]
+  alias         text    [not null]
+
+  Indexes {
+    (user_id, alias) [unique]
+    (user_id, ingredient_id) [unique]
+  }
+}
+
+Table inventory_items {
+  id            integer [pk, increment]
+  user_id       integer [not null, ref: > users.id]
+  ingredient_id integer [not null, ref: > ingredients.id]
+  quantity      real    [not null, default: 0]
+  unit          text
+  expires_at    date
+  is_active     boolean [default: true]
+  created_at    datetime [default: `CURRENT_TIMESTAMP`]
+  updated_at    datetime [default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    user_id
+    ingredient_id
+    (user_id, ingredient_id) [unique]
+    expires_at
+    is_active
+  }
+}
+
+Table plan_entries {
+  id         integer   [pk, increment]
+  user_id    integer   [not null, ref: > users.id]
+  date       date      [not null]
+  meal       meal_type [not null]
+  recipe_id  integer   [ref: > recipes.id]
+  servings   integer   [default: 1]
+  notes      text
+  created_at datetime  [default: `CURRENT_TIMESTAMP`]
+  updated_at datetime  [default: `CURRENT_TIMESTAMP`]
+
+  Indexes {
+    user_id
+    (user_id, date, meal) [unique]
+    recipe_id
+  }
+}
+
+/*
+Notas:
+- Lista de compras: calcular en servicios desde plan_entries + recipe_ingredients – inventory_items.
+  Si luego querés workflow/historial, agregá shopping_list/shopping_list_items sin romper este modelo.
+- Semanas: la UI puede agrupar por semana sin persistir weekly_plan. Si necesitás plantillas o clonación,
+  añadís weekly_plan/planned_meals como capa opcional más adelante.
+*/
