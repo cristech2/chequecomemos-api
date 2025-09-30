@@ -19,14 +19,50 @@ Permite gestionar **recetas**, **planificación semanal**, **inventario** y la *
 - [FastAPI](https://fastapi.tiangolo.com/) – framework backend
 - [Python 3.12+](https://www.python.org/)
 - [Uvicorn](https://www.uvicorn.org/) – servidor ASGI
-- [SQLite] – base de datos predeterminada para MVP (local, simple y portable)
+- [SQLite] – base de datos predeterminada para MVP (local; vive fuera de este repo)
 - [SQLAlchemy](https://www.sqlalchemy.org/) – ORM para gestionar la capa de datos
 - [Alembic](https://alembic.sqlalchemy.org/) – migraciones de esquema versionadas
+- [Pytest](https://docs.pytest.org/) – framework de pruebas unitarias e integrales
 - [Docker] (opcional, para despliegue)
 
 ---
 
-## 📂 Estructura a definir, priorizando el desarrollo solamente por mi
+## 📂 Estructura (propuesta)
+
+```text
+backend/
+├─ app/
+│  ├─ main.py        # Punto de entrada. Crea la aplicación FastAPI, monta routers y arranca el servidor.
+│  │
+│  ├─ core/          # Elementos comunes e infraestructura.
+│  │                 # Configuración general (variables, conexión DB).
+│  │                 # Sesión de base de datos (ciclo de vida por request).
+│  │
+│  ├─ api/           # Capa de exposición HTTP.
+│  │                 # Contiene routers de los recursos.
+│  │                 # Solo definen endpoints, validaciones de entrada/salida y códigos de respuesta.
+│  │                 # No contienen lógica de negocio ni SQL.
+│  │
+│  ├─ services/      # Capa de lógica de negocio.
+│  │                 # Funciones que aplican reglas y coordinan operaciones.
+│  │                 # Llaman a repositorios o directamente a los modelos.
+│  │                 # Mantienen las reglas independientes del protocolo HTTP.
+│  │
+│  ├─ models/        # Capa de persistencia (ORM).
+│  │                 # Tablas y relaciones definidas en SQLAlchemy.
+│  │                 # No contienen reglas de negocio, solo estructura de datos.
+│  │
+│  └─ schemas/       # Capa de contratos de datos.
+│                    # Definiciones de entrada/salida con Pydantic.
+│                    # Diferencian entre crear/actualizar/mostrar.
+│
+├─ alembic/          # Migraciones versionadas de esquema de base de datos.
+├─ alembic.ini       # Configuración de Alembic.
+│
+└─ tests/            # Pruebas automáticas.
+    ├─ unit/         # Pruebas de servicios sin levantar servidor.
+    └─ integration/  # Pruebas de endpoints a través de la API.
+```
 
 ## 📅 Endpoints (MVP)
 
