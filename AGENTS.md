@@ -88,7 +88,7 @@ backend/
 
 ## Formato de Mensajes de Commit
 
-```
+```textplain
 tipo(scope): resumen en imperativo
 
 [cuerpo opcional con detalles adicionales]
