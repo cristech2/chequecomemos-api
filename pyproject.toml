@@ -73,6 +73,6 @@ skip_covered = true
 name = "cz_conventional_commits"
 tag_format = "$version-alpha"
 version_scheme = "semver2"
-version = "0.1.0"
+version = "0.2.0"
 update_changelog_on_bump = true
 major_version_zero = true
