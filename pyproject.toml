@@ -38,24 +38,25 @@ target-version = ["py312"]
 include = "\\.pyi?$"
 
 # Configuración general de linting con Ruff.
+
 [tool.ruff]
 line-length = 88
 src = ["app", "tests"]
 target-version = "py312"
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 ignore = ["E203", "E266", "E501"]
 
-# Exclusiones puntuales de reglas Ruff específicas para tests.
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
 
-# Parametrización de orden de imports mediante Ruff/isort.
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
 
 # Preferencias para la ejecución de Pytest.
 [tool.pytest.ini_options]
-addopts = "--maxfail=1 --disable-warnings"
+addopts = "--maxfail=1"
 testpaths = ["tests"]
 
 # Cobertura: opciones de ejecución y reporte.
