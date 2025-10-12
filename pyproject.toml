@@ -15,10 +15,11 @@ dependencies = [
   "fastapi[standard]>=0.110,<1.0",
   "uvicorn[standard]>=0.24,<1.0",
   "pydantic>=2.5,<3.0",
-  "sqlalchemy>=2.0,<3.0",
   "alembic>=1.12,<2.0",
   "passlib>=1.7,<2.0",
   "bcrypt>=4.0,<5.0",
+  "sqlmodel>=0.0.8,<0.1.0",
+  "aiosqlite>=0.19,<1.0",
 ]
 
 # Paquete de dependencias para entorno de desarrollo y herramientas auxiliares.
