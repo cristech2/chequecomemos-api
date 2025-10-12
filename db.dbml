@@ -28,11 +28,11 @@ Table users {
 Table ingredients {
   id           integer [pk, increment]
   name         text    [not null, unique]
-  category     text
+  category_id  integer [ref: > categories.id]
   default_unit text
 
   Indexes {
-    category
+    category_id
   }
 }
 
@@ -87,6 +87,11 @@ Table user_saved_recipes {
     user_id
     (user_id, recipe_id) [unique]
   }
+}
+
+Table categories {
+  id   integer [pk, increment]
+  name text    [not null, unique]
 }
 
 Table user_ingredient_aliases {
