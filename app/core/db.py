@@ -3,8 +3,7 @@
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 load_dotenv()  # Cargar variables de entorno desde un archivo .env
 
@@ -16,12 +15,7 @@ if DATABASE_URL is None:
     raise RuntimeError("La variable de entorno DATABASE_URL no está definida.")
 
 # Crear el motor de la base de datos
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_async_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 # creamos la sesion
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-# creamos la clase base para los modelos
-class Base(DeclarativeBase):
-    pass
+async_session = async_sessionmaker(engine, expire_on_commit=False)
