@@ -1,19 +1,36 @@
-"""Modelo para la tabla categories"""
+"""Modelo para la tabla categories y contrato para el cliente y la respuesta del servidor."""
 
-from sqlalchemy import Column, Integer, String
-
-from app.core.db import Base
+from sqlmodel import Field, SQLModel  # pyright: ignore[reportUnknownVariableType]
 
 
-class Category(Base):
+class CategoryCreate(SQLModel):
+    """Modelo para la creación de una nueva categoría de comida."""
+
+    # Nombre de la categoría. Debe ser único y no nulo.
+    name: str
+
+
+class CategoryOut(CategoryCreate):
+    """Modelo para la respuesta de una categoría de comida."""
+
+    # Identificador único de la categoría.
+    category_id: int
+
+
+class Category(CategoryCreate, table=True):
     """
     Representa una categoría de comida en la base de datos.
     Cada categoría tiene un identificador único y un nombre descriptivo.
     """
 
-    __tablename__ = "categories"
-
-    category_id = Column(Integer, primary_key=True, index=True)
     # Identificador único de la categoría.
-    name = Column(String, nullable=False, unique=True)
+    category_id: int = Field(default=None, primary_key=True)
     # Nombre de la categoría. Debe ser único y no nulo.
+    name: str = Field(default=None, nullable=False, unique=True)
+
+
+class CategoriesResponse(SQLModel):
+    """Modelo para la respuesta que contiene una lista de categorías."""
+
+    # Respuesta para la lista de categorías.
+    categories: list[CategoryOut]
