@@ -21,8 +21,8 @@ async def create_user(db: Session, user: UserCreate) -> UserBD:
     """
     # Verifica si el usuario ya existe
     statement = select(UserBD).where(UserBD.email == user.email)
-    result = await db.execute(statement)
-    db_user = result.first()
+    db_user = await db.scalars(statement)
+    db_user = db_user.first()
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
