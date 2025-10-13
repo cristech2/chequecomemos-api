@@ -17,7 +17,7 @@ class CategoryOut(CategoryCreate):
     category_id: int
 
 
-class Category(CategoryCreate, table=True):
+class CategoryDB(CategoryCreate, table=True):
     """
     Representa una categoría de comida en la base de datos.
     Cada categoría tiene un identificador único y un nombre descriptivo.
