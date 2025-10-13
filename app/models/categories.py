@@ -10,14 +10,14 @@ class CategoryCreate(SQLModel):
     name: str
 
 
-class CategoryOut(CategoryCreate):
+class CategorieSingleResponse(CategoryCreate):
     """Modelo para la respuesta de una categoría de comida."""
 
     # Identificador único de la categoría.
     category_id: int
 
 
-class CategoryDB(CategoryCreate, table=True):
+class Categories(CategoryCreate, table=True):
     """
     Representa una categoría de comida en la base de datos.
     Cada categoría tiene un identificador único y un nombre descriptivo.
@@ -29,8 +29,8 @@ class CategoryDB(CategoryCreate, table=True):
     name: str = Field(default=None, nullable=False, unique=True)
 
 
-class CategoriesResponse(SQLModel):
+class CategoriesListResponse(SQLModel):
     """Modelo para la respuesta que contiene una lista de categorías."""
 
     # Respuesta para la lista de categorías.
-    categories: list[CategoryOut]
+    categories: list[CategorieSingleResponse]
