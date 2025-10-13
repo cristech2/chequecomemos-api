@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession as Session
 from sqlmodel import select
 
 from app.core.security import get_hash_password
-from app.models import UserBD, UserCreate
+from app.models import UserCreate
+from app.models import Users as UserBD
 
 
 async def create_user(db: Session, user: UserCreate) -> UserBD:
