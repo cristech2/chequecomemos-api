@@ -1,31 +1,54 @@
 """Modelo de Usuarios: Este módulo define la estructura del modelo para usuarios en la aplicación."""
 
 # Importar la base de datos desde la configuración
-from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.sql import func
+from datetime import datetime
 
-from app.core.db import Base
+from sqlmodel import Field, SQLModel  # pyright: ignore[reportUnknownVariableType]
 
 
-class User(Base):
+class UserBase(SQLModel):
+    """Modelo base para usuarios, utilizado para compartir atributos comunes."""
+
+    # Correo electrónico del usuario. Debe ser único.
+    email: str
+    # Nombre completo del usuario.
+    full_name: str
+    # Nombre de la familia asociada al usuario.
+    family_name: str
+
+
+class UserBD(UserBase, table=True):
     """
     Representa un usuario de la aplicación.
     Cada usuario tiene identificador, correo, nombre completo, nombre familiar y fechas de creación/actualización.
     """
 
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
     # Identificador único del usuario.
-    email = Column(String, unique=True, index=True)
+    id: int = Field(default=None, primary_key=True)
     # Correo electrónico del usuario. Debe ser único.
-    full_name = Column(String)
+    email: str = Field(default=None, unique=True, index=True)
     # Nombre completo del usuario.
-    family_name = Column(String)
+    full_name: str = Field(default=None)
     # Nombre de la familia asociada al usuario.
-    hashed_password = Column(String)
+    family_name: str = Field(default=None)
     # Contraseña cifrada del usuario.
-    created_at = Column(DateTime, server_default=func.now())
+    hashed_password: str = Field(default=None)
     # Fecha de creación del registro.
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
-    # Fecha de última actualización del registro.
+    created_at: datetime = Field(default_factory=lambda: datetime.now(datetime.UTC))  # type: ignore
+    # Fecha de actualización del registro.
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(datetime.UTC))  # type: ignore
+
+
+class UserCreate(UserBase):
+    """Modelo para la creación de un nuevo usuario, incluye la contraseña."""
+
+    # Contraseña del usuario en texto plano (será cifrada antes de almacenar).
+    password: str
+
+
+class UserResponse(UserBase):
+    """Modelo para la respuesta de usuario, excluye la contraseña."""
+
+    id: int
+    created_at: datetime
+    updated_at: datetime

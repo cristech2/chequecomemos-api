@@ -1,14 +1,14 @@
 """Servicio de usuarios, maneja la lógica de negocio relacionada con los usuarios."""
 
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession as Session
+from sqlmodel import select
 
 from app.core.security import get_hash_password
-from app.models import User
-from app.schemas import UserCreate
+from app.models import UserBD, UserCreate
 
 
-def create_user(db: Session, user: UserCreate) -> User:
+async def create_user(db: Session, user: UserCreate) -> UserBD:
     """Crea un nuevo usuario en la base de datos.
 
     Args:
@@ -16,10 +16,12 @@ def create_user(db: Session, user: UserCreate) -> User:
         user (UserCreate): Los datos del nuevo usuario.
 
     Returns:
-        User: El usuario creado.
+        UserResponse: El usuario creado.
     """
     # Verifica si el usuario ya existe
-    db_user = db.query(User).filter(User.email == user.email).first()
+    statement = select(UserBD).where(UserBD.email == user.email)
+    result = await db.execute(statement)
+    db_user = result.first()
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -30,7 +32,7 @@ def create_user(db: Session, user: UserCreate) -> User:
     hashed_password = get_hash_password(user.password)
 
     # creamos el usuario
-    new_user = User(
+    new_user = UserBD(
         email=user.email,
         hashed_password=hashed_password,
         full_name=user.full_name,
@@ -39,8 +41,8 @@ def create_user(db: Session, user: UserCreate) -> User:
 
     # Agrega el usuario a la sesión y confirma la transacción
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    await db.commit()
+    await db.refresh(new_user)
 
     # Retorna el usuario creado
     return new_user

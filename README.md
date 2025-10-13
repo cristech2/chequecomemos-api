@@ -20,7 +20,7 @@ Permite gestionar **recetas**, **planificación semanal**, **inventario** y la *
 - [Python 3.12+](https://www.python.org/)
 - [Uvicorn](https://www.uvicorn.org/) – servidor ASGI
 - [SQLite] – base de datos predeterminada para MVP (local; vive fuera de este repo)
-- [SQLAlchemy](https://www.sqlalchemy.org/) – ORM para gestionar la capa de datos
+- [SQLModel](https://sqlmodel.tiangolo.com/) – ORM para gestionar la capa de datos
 - [Alembic](https://alembic.sqlalchemy.org/) – migraciones de esquema versionadas
 - [Pytest](https://docs.pytest.org/) – framework de pruebas unitarias e integrales
 - [Docker] (opcional, para despliegue)

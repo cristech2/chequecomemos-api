@@ -1,5 +1,14 @@
 # Copilot Instructions for AI Agents
 
+## Normas para Copilot
+- Seguir las convenciones de codificación y estilo del proyecto.
+- Proporcionar explicaciones claras y concisas para cada función y clase.
+- Siempre verificar el codigo mencionado o agregado al contexto antes de responder
+- Incluir ejemplos de uso en la documentación.
+- Mantener la coherencia en los nombres de las variables y funciones.
+- Realizar revisiones de código antes de fusionar cambios.
+- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir.
+
 ## Arquitectura y Estructura
 - Proyecto backend FastAPI para planificador familiar de comidas ("Che, ¿qué comemos?").
 - Estructura modular bajo `app/`:
@@ -27,7 +36,7 @@
 
 ## Integraciones y Dependencias
 - Base de datos SQLite por defecto (local, fuera del repo).
-- ORM: SQLAlchemy; migraciones: Alembic.
+- ORM: SQLModel; migraciones: Alembic.
 - Pruebas: Pytest, usar fixtures SQLite en memoria para lógica con BD.
 - Documentación interactiva: `/docs` (Swagger UI, FastAPI).
 
