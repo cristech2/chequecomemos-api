@@ -1,0 +1,38 @@
+{
+  "info": {
+    "_postman_id": "planificador-comidas-api-collection",
+    "name": "Planificador_Comidas_API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección de endpoints actuales para el planificador de comidas."
+  },
+  "item": [
+    {
+      "name": "Registrar usuario",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"usuario.prueba@email.com\",\n  \"full_name\": \"Usuario Prueba\",\n  \"family_name\": \"Familia Prueba\",\n  \"password\": \"12345678\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/users/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
