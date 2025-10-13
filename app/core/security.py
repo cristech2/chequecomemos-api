@@ -1,9 +1,6 @@
 """Modulo de seguridad utilizando passlib para hashear contraseñas"""
 
-from passlib.context import CryptContext
-
-# Configuración del contexto de hashing de contraseñas
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 
 def get_hash_password(password: str) -> str:
@@ -15,8 +12,11 @@ def get_hash_password(password: str) -> str:
 
     Return: La contraseña hasheada.
     """
+    # Codifica la contraseña a bytes y genera un salt
+    pwd_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
 
-    return password_context.hash(password)
+    return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -29,4 +29,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
     Return: True si las contraseñas coinciden, False en caso contrario.
     """
-    return password_context.verify(plain_password, hashed_password)
+    # Codifica ambos a bytes para la verificación
+    plain_bytes = plain_password.encode("utf-8")
+    hashed_bytes = hashed_password.encode("utf-8")
+    return bcrypt.checkpw(plain_bytes, hashed_bytes)
