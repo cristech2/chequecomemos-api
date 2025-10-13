@@ -3,6 +3,7 @@
 ## Normas para Copilot
 - Seguir las convenciones de codificación y estilo del proyecto.
 - Proporcionar explicaciones claras y concisas para cada función y clase.
+- Siempre verificar el codigo mencionado o agregado al contexto antes de responder
 - Incluir ejemplos de uso en la documentación.
 - Mantener la coherencia en los nombres de las variables y funciones.
 - Realizar revisiones de código antes de fusionar cambios.
