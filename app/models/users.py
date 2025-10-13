@@ -1,7 +1,7 @@
 """Modelo de Usuarios: Este módulo define la estructura del modelo para usuarios en la aplicación."""
 
 # Importar la base de datos desde la configuración
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlmodel import Field, SQLModel  # pyright: ignore[reportUnknownVariableType]
 
@@ -17,7 +17,7 @@ class UserBase(SQLModel):
     family_name: str
 
 
-class UserBD(UserBase, table=True):
+class Users(UserBase, table=True):
     """
     Representa un usuario de la aplicación.
     Cada usuario tiene identificador, correo, nombre completo, nombre familiar y fechas de creación/actualización.
@@ -34,9 +34,9 @@ class UserBD(UserBase, table=True):
     # Contraseña cifrada del usuario.
     hashed_password: str = Field(default=None)
     # Fecha de creación del registro.
-    created_at: datetime = Field(default_factory=lambda: datetime.now(datetime.UTC))  # type: ignore
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
     # Fecha de actualización del registro.
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(datetime.UTC))  # type: ignore
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
 
 
 class UserCreate(UserBase):
