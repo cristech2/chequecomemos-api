@@ -1,9 +1,5 @@
-from .categories import (  # noqa: F401
-    CategoriesResponse,
-    CategoryCreate,
-    CategoryDB,
-    CategoryOut,
-)
+from .categories import Categories as CategoryDB  # noqa: F401
+from .categories import CategoriesResponse, CategoryCreate, CategoryOut
 from .users import UserBD, UserCreate, UserResponse  # noqa: F401
 
 __all__ = [
