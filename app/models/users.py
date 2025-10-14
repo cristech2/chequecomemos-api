@@ -1,9 +1,14 @@
 """Modelo de Usuarios: Este módulo define la estructura del modelo para usuarios en la aplicación."""
 
+import uuid
+
 # Importar la base de datos desde la configuración
 from datetime import datetime, timezone
 
-from sqlmodel import Field, SQLModel  # pyright: ignore[reportUnknownVariableType]
+from sqlmodel import (
+    Field,  # pyright: ignore[reportUnknownVariableType]
+    SQLModel,
+)
 
 
 class UserBase(SQLModel):
@@ -24,7 +29,7 @@ class Users(UserBase, table=True):
     """
 
     # Identificador único del usuario.
-    id: int = Field(default=None, primary_key=True)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     # Correo electrónico del usuario. Debe ser único.
     email: str = Field(default=None, unique=True, index=True)
     # Nombre completo del usuario.
@@ -50,5 +55,9 @@ class UserResponse(UserBase):
     """Modelo para la respuesta de usuario, excluye la contraseña."""
 
     id: int
+    created_at: datetime
+    updated_at: datetime
+    created_at: datetime
+    updated_at: datetime
     created_at: datetime
     updated_at: datetime
