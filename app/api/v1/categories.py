@@ -1,11 +1,13 @@
 """Endponit para la gestion de categorias"""
 
+import uuid
+
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession as Session
 
 from app.dependencies import get_db
 from app.models import CategorieSingleResponse, CategoriesListResponse, CategoryCreate
-from app.services import create_category, get_categories, get_category
+from app.services import create_category, delete_category, get_categories, get_category
 
 router = APIRouter(prefix="/categories", tags=["categories"])
 
@@ -32,7 +34,7 @@ async def create_new_category(
 
 @router.get("/{category_id}", response_model=CategorieSingleResponse)
 async def get_category_by_id(
-    category_id: int,
+    category_id: uuid.UUID,
     db: Session = Depends(get_db),  # noqa: B008
 ):
     """Obtiene una categoría por su ID.
@@ -66,3 +68,18 @@ async def get_all_categories(db: Session = Depends(get_db)):  # noqa: B008
             for cat in categories
         ]
     )
+
+
+@router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_category_by_id(
+    category_id: uuid.UUID,
+    db: Session = Depends(get_db),  # noqa: B008
+):
+    """Elimina una categoría por su ID.
+
+    Args:
+        category_id (uuid.UUID): ID de la categoría a eliminar.
+        db (Session): Sesión de la base de datos. Defaults to Depends(get_db).
+    """
+    await delete_category(category_id=category_id, db=db)
+    return None
