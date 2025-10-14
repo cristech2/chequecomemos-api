@@ -1,5 +1,7 @@
 """Servicio de categorias, maneja la lógica de negocio relacionada con las categorías."""
 
+import uuid
+
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession as Session
 from sqlmodel import select
@@ -34,12 +36,12 @@ async def create_category(db: Session, category: CategoryCreate) -> CategoryDB:
     return new_category
 
 
-async def get_category(db: Session, category_id: int) -> CategoryDB:
+async def get_category(db: Session, category_id: uuid.UUID) -> CategoryDB:
     """Busca una categoria por su ID.
 
     Args:
         db (Session): La sesión de la base de datos.
-        category_id (int): El ID de la categoría a buscar.
+        category_id (uuid.UUID): El ID de la categoría a buscar.
 
     Returns:
         CategoryDB: la categoría encontrada.
@@ -69,3 +71,26 @@ async def get_categories(db: Session) -> list[CategoryDB]:
     results = await db.scalars(statement)
     categories = list(results.all())
     return categories
+
+
+async def delete_category(db: Session, category_id: uuid.UUID) -> None:
+    """Elimina una categoría por su ID.
+
+    Args:
+        db (Session): La sesión de la base de datos.
+        category_id (uuid.UUID): El ID de la categoría a eliminar.
+
+    Raises:
+        HTTPException: Si la categoría no existe.
+    """
+    # Busca la categoría por su ID
+    statement = select(CategoryDB).where(CategoryDB.category_id == category_id)
+    db_category = await db.scalars(statement)
+    db_category = db_category.first()
+    if not db_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Categoría no encontrada.",
+        )
+    await db.delete(db_category)
+    await db.commit()
