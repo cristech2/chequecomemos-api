@@ -54,10 +54,6 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     """Modelo para la respuesta de usuario, excluye la contraseña."""
 
-    id: int
-    created_at: datetime
-    updated_at: datetime
-    created_at: datetime
-    updated_at: datetime
+    id: uuid.UUID
     created_at: datetime
     updated_at: datetime
