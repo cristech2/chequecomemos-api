@@ -6,12 +6,12 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
-from app.models.categories import Category  # noqa: F401
-from app.models.users import User  # noqa: F401
+from app.models.categories import Categories  # noqa: F401
+from app.models.users import Users  # noqa: F401
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_MIGRATION_URL")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
