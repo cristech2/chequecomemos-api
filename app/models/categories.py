@@ -1,5 +1,7 @@
 """Modelo para la tabla categories y contrato para el cliente y la respuesta del servidor."""
 
+import uuid
+
 from sqlmodel import Field, SQLModel  # pyright: ignore[reportUnknownVariableType]
 
 
@@ -14,7 +16,7 @@ class CategorieSingleResponse(CategoryCreate):
     """Modelo para la respuesta de una categoría de comida."""
 
     # Identificador único de la categoría.
-    category_id: int
+    category_id: uuid.UUID
 
 
 class Categories(CategoryCreate, table=True):
@@ -24,7 +26,7 @@ class Categories(CategoryCreate, table=True):
     """
 
     # Identificador único de la categoría.
-    category_id: int = Field(default=None, primary_key=True)
+    category_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     # Nombre de la categoría. Debe ser único y no nulo.
     name: str = Field(default=None, nullable=False, unique=True)
 
