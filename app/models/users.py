@@ -5,6 +5,7 @@ import uuid
 # Importar la base de datos desde la configuración
 from datetime import datetime, timezone
 
+from pydantic import EmailStr
 from sqlmodel import (
     Field,  # pyright: ignore[reportUnknownVariableType]
     SQLModel,
@@ -15,7 +16,7 @@ class UserBase(SQLModel):
     """Modelo base para usuarios, utilizado para compartir atributos comunes."""
 
     # Correo electrónico del usuario. Debe ser único.
-    email: str
+    email: EmailStr
     # Nombre completo del usuario.
     full_name: str
     # Nombre de la familia asociada al usuario.
@@ -31,7 +32,7 @@ class Users(UserBase, table=True):
     # Identificador único del usuario.
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     # Correo electrónico del usuario. Debe ser único.
-    email: str = Field(default=None, unique=True, index=True)
+    email: EmailStr = Field(default=None, unique=True, index=True)
     # Nombre completo del usuario.
     full_name: str = Field(default=None)
     # Nombre de la familia asociada al usuario.
@@ -49,6 +50,17 @@ class UserCreate(UserBase):
 
     # Contraseña del usuario en texto plano (será cifrada antes de almacenar).
     password: str
+
+
+class UserUpdate(SQLModel):
+    """Modelo para la actualización de un usuario, todos los campos son opcionales."""
+
+    # Correo electrónico del usuario. Debe ser único.
+    email: EmailStr | None = None
+    # Nombre completo del usuario.
+    full_name: str | None = None
+    # Nombre de la familia asociada al usuario.
+    family_name: str | None = None
 
 
 class UserResponse(UserBase):

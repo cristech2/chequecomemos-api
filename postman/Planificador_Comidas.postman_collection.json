@@ -35,19 +35,47 @@
       "response": []
     },
     {
-      "name": "Obtener usuario por ID",
+      "name": "Obtener usuario por email",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/v1/users/{{user_id}}",
+          "raw": "{{base_url}}/v1/users/{{user_email}}",
           "host": [
             "{{base_url}}"
           ],
           "path": [
             "v1",
             "users",
-            "{{user_id}}"
+            "{{user_email}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modificar usuario",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"full_name\": \"Nuevo Nombre\",\n  \"family_name\": \"Nueva Familia\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/users/{{user_email}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "users",
+            "{{user_email}}"
           ]
         }
       },

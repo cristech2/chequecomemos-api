@@ -4,12 +4,13 @@ from .categories import (  # noqa: F401
     CategoriesListResponse,
     CategoryCreate,
 )
-from .users import UserCreate, UserResponse, Users  # noqa: F401
+from .users import UserCreate, UserResponse, Users, UserUpdate  # noqa: F401
 
 __all__ = [
     "UserCreate",
     "UserResponse",
     "Users",
+    "UserUpdate",
     "CategoryDB",
     "CategoryCreate",
     "CategorieSingleResponse",
