@@ -4,10 +4,12 @@ from .categories_service import (
     get_categories,
     get_category,
 )
-from .user_service import create_user
+from .user_service import create_user, get_user_by_email, update_user
 
 __all__ = [
     "create_user",
+    "get_user_by_email",
+    "update_user",
     "create_category",
     "get_category",
     "get_categories",
