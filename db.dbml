@@ -1,153 +1,173 @@
-Project "Che, ¿qué comemos? – MVP (Catálogo global + overlays usuario)" {
-  database_type: "SQLite"
-  note: "Recetas/ingredientes globales compartibles; plan/inventario por usuario; lista de compras derivada en servicios"
+Table users [headercolor: #47a6cc] {
+	id uuid [ pk, unique ]
+	email text [ not null ]
+	family_name text
+	created_at datetime [ default: "CURRENT_TIMESTAMP" ]
+	updated_at datetime [ default: "CURRENT_TIMESTAMP" ]
 }
 
-/* ===== Enums ===== */
-Enum meal_type {
-  lunch
-  dinner
+Table ingredients [headercolor: #2ad42a] {
+	id uuid [ pk, unique ]
+	name text [ not null ]
+	category_id integer
+	default_unit text
+
+	indexes {
+		(category_id) [ name: 'ingredients_index_0' ]
+	}
 }
 
-Enum recipe_visibility {
-  public
-  unlisted
-  private
+Table recipes [headercolor: #2ad42a] {
+	id uuid [ pk, unique ]
+	owner_user_id integer
+	name text [ not null ]
+	description text
+	instructions text
+	servings_default integer [ not null, default: 1 ]
+	prep_minutes integer
+	cook_minutes integer
+	visibility recipe_visibility [ not null, default: "public" ]
+	created_at datetime [ default: "CURRENT_TIMESTAMP" ]
+	updated_at datetime [ default: "CURRENT_TIMESTAMP" ]
+
+	indexes {
+		(owner_user_id) [ name: 'recipes_index_1' ]
+		(visibility) [ name: 'recipes_index_2' ]
+		(name) [ name: 'recipes_index_3' ]
+	}
 }
 
-/* ===== Usuarios ===== */
-Table users {
-  id           integer  [pk, increment]
-  email        text     [not null, unique]
-  family_name  text
-  created_at   datetime [default: `CURRENT_TIMESTAMP`]
-  updated_at   datetime [default: `CURRENT_TIMESTAMP`]
+Table recipe_ingredients [headercolor: #999e9e] {
+	id uuid [ pk, unique ]
+	recipe_id uuid [ not null ]
+	ingredient_id integer [ not null ]
+	quantity real
+	unit text
+	optional boolean [ default: false ]
+	position integer
+
+	indexes {
+		(recipe_id) [ name: 'recipe_ingredients_index_4' ]
+		(ingredient_id) [ name: 'recipe_ingredients_index_5' ]
+		(recipe_id, ingredient_id) [ name: 'recipe_ingredients_index_6', unique ]
+	}
 }
 
-/* ===== Catálogo global ===== */
-Table ingredients {
-  id           integer [pk, increment]
-  name         text    [not null, unique]
-  category_id  integer [ref: > categories.id]
-  default_unit text
+Table user_saved_recipes [headercolor: #d5db16] {
+	id uuid [ pk, unique ]
+	user_id uuid [ not null ]
+	recipe_id uuid [ not null ]
+	custom_name text
+	custom_servings integer
+	pinned boolean [ default: false ]
+	notes text
+	created_at datetime [ default: "CURRENT_TIMESTAMP" ]
 
-  Indexes {
-    category_id
-  }
+	indexes {
+		(user_id) [ name: 'user_saved_recipes_index_7' ]
+		(user_id, recipe_id) [ name: 'user_saved_recipes_index_8', unique ]
+	}
 }
 
-Table recipes {
-  id               integer            [pk, increment]
-  owner_user_id    integer            [ref: > users.id]    // autor (nullable si son recetas del sistema)
-  name             text               [not null]
-  description      text
-  instructions     text
-  servings_default integer            [not null, default: 1]
-  prep_minutes     integer
-  cook_minutes     integer
-  visibility       recipe_visibility  [not null, default: 'public']
-  created_at       datetime           [default: `CURRENT_TIMESTAMP`]
-  updated_at       datetime           [default: `CURRENT_TIMESTAMP`]
-
-  Indexes {
-    owner_user_id
-    visibility
-    name
-  }
+Table categories [headercolor: #2ad42a] {
+	id uuid [ pk, unique ]
+	name text [ not null ]
 }
 
-Table recipe_ingredients {
-  id            integer [pk, increment]
-  recipe_id     integer [not null, ref: > recipes.id]
-  ingredient_id integer [not null, ref: > ingredients.id]
-  quantity      real
-  unit          text
-  optional      boolean [default: false]
-  position      integer
+Table user_ingredient_aliases [headercolor: #d5db16] {
+	id uuid [ pk, unique ]
+	user_id uuid [ not null ]
+	ingredient_id integer [ not null ]
+	alias text [ not null ]
 
-  Indexes {
-    recipe_id
-    ingredient_id
-    (recipe_id, ingredient_id) [unique]
-  }
+	indexes {
+		(user_id, alias) [ name: 'user_ingredient_aliases_index_9', unique ]
+		(user_id, ingredient_id) [ name: 'user_ingredient_aliases_index_10', unique ]
+	}
 }
 
-/* ===== Overlays/estado por usuario ===== */
-Table user_saved_recipes {
-  id              integer [pk, increment]
-  user_id         integer [not null, ref: > users.id]
-  recipe_id       integer [not null, ref: > recipes.id]
-  custom_name     text
-  custom_servings integer
-  pinned          boolean [default: false]
-  notes           text
-  created_at      datetime [default: `CURRENT_TIMESTAMP`]
+Table inventory_items [headercolor: #d5db16] {
+	id uuid [ pk, unique ]
+	user_id uuid [ not null ]
+	ingredient_id integer [ not null ]
+	quantity real [ not null ]
+	unit text
+	expires_at date
+	is_active boolean [ default: true ]
+	created_at datetime [ default: "CURRENT_TIMESTAMP" ]
+	updated_at datetime [ default: "CURRENT_TIMESTAMP "]
 
-  Indexes {
-    user_id
-    (user_id, recipe_id) [unique]
-  }
+	indexes {
+		(user_id) [ name: 'inventory_items_index_11' ]
+		(ingredient_id) [ name: 'inventory_items_index_12' ]
+		(user_id, ingredient_id) [ name: 'inventory_items_index_13', unique ]
+		(expires_at) [ name: 'inventory_items_index_14' ]
+		(is_active) [ name: 'inventory_items_index_15' ]
+	}
 }
 
-Table categories {
-  id   integer [pk, increment]
-  name text    [not null, unique]
+Table plan_entries [headercolor: #d5db16] {
+	id uuid [ pk, unique ]
+	user_id uuid [ not null ]
+	date date [ not null ]
+	meal meal_type [ not null ]
+	recipe_id integer
+	servings integer [ default: 1 ]
+	notes text
+	created_at datetime [ default: "CURRENT_TIMESTAMP" ]
+	updated_at datetime [ default: "CURRENT_TIMESTAMP" ]
+
+	indexes {
+		(user_id) [ name: 'plan_entries_index_16' ]
+		(user_id, date, meal) [ name: 'plan_entries_index_17', unique ]
+		(recipe_id) [ name: 'plan_entries_index_18' ]
+	}
 }
 
-Table user_ingredient_aliases {
-  id            integer [pk, increment]
-  user_id       integer [not null, ref: > users.id]
-  ingredient_id integer [not null, ref: > ingredients.id]
-  alias         text    [not null]
-
-  Indexes {
-    (user_id, alias) [unique]
-    (user_id, ingredient_id) [unique]
-  }
+Ref fk_categories_id_ingredients {
+	categories.id < ingredients.category_id [ delete: no action, update: no action ]
 }
 
-Table inventory_items {
-  id            integer [pk, increment]
-  user_id       integer [not null, ref: > users.id]
-  ingredient_id integer [not null, ref: > ingredients.id]
-  quantity      real    [not null, default: 0]
-  unit          text
-  expires_at    date
-  is_active     boolean [default: true]
-  created_at    datetime [default: `CURRENT_TIMESTAMP`]
-  updated_at    datetime [default: `CURRENT_TIMESTAMP`]
-
-  Indexes {
-    user_id
-    ingredient_id
-    (user_id, ingredient_id) [unique]
-    expires_at
-    is_active
-  }
+Ref fk_users_id_recipes {
+	users.id < recipes.owner_user_id [ delete: no action, update: no action ]
 }
 
-Table plan_entries {
-  id         integer   [pk, increment]
-  user_id    integer   [not null, ref: > users.id]
-  date       date      [not null]
-  meal       meal_type [not null]
-  recipe_id  integer   [ref: > recipes.id]
-  servings   integer   [default: 1]
-  notes      text
-  created_at datetime  [default: `CURRENT_TIMESTAMP`]
-  updated_at datetime  [default: `CURRENT_TIMESTAMP`]
-
-  Indexes {
-    user_id
-    (user_id, date, meal) [unique]
-    recipe_id
-  }
+Ref fk_recipes_id_recipe_ingredients {
+	recipes.id < recipe_ingredients.recipe_id [ delete: no action, update: no action ]
 }
 
-/*
-Notas:
-- Lista de compras: calcular en servicios desde plan_entries + recipe_ingredients – inventory_items.
-  Si luego querés workflow/historial, agregá shopping_list/shopping_list_items sin romper este modelo.
-- Semanas: la UI puede agrupar por semana sin persistir weekly_plan. Si necesitás plantillas o clonación,
-  añadís weekly_plan/planned_meals como capa opcional más adelante.
-*/
+Ref fk_ingredients_id_recipe_ingredients {
+	ingredients.id < recipe_ingredients.ingredient_id [ delete: no action, update: no action ]
+}
+
+Ref fk_users_id_user_saved_recipes {
+	users.id < user_saved_recipes.user_id [ delete: no action, update: no action ]
+}
+
+Ref fk_recipes_id_user_saved_recipes {
+	recipes.id < user_saved_recipes.recipe_id [ delete: no action, update: no action ]
+}
+
+Ref fk_users_id_user_ingredient_aliases {
+	users.id < user_ingredient_aliases.user_id [ delete: no action, update: no action ]
+}
+
+Ref fk_ingredients_id_user_ingredient_aliases {
+	ingredients.id < user_ingredient_aliases.ingredient_id [ delete: no action, update: no action ]
+}
+
+Ref fk_users_id_inventory_items {
+	users.id < inventory_items.user_id [ delete: no action, update: no action ]
+}
+
+Ref fk_ingredients_id_inventory_items {
+	ingredients.id < inventory_items.ingredient_id [ delete: no action, update: no action ]
+}
+
+Ref fk_users_id_plan_entries {
+	users.id < plan_entries.user_id [ delete: no action, update: no action ]
+}
+
+Ref fk_recipes_id_plan_entries {
+	recipes.id < plan_entries.recipe_id [ delete: no action, update: no action ]
+}
