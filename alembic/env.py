@@ -7,6 +7,7 @@ from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
 from app.models.categories import Categories  # noqa: F401
+from app.models.ingredients import Ingredients  # noqa: F401
 from app.models.users import Users  # noqa: F401
 
 load_dotenv()
