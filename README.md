@@ -1,68 +1,139 @@
-# 🥗 Backend - Planificador Familiar de Comidas (Nombre Comercial: Che, ¿qué comemos?)
 
-API REST construida con **FastAPI** para el MVP del planificador familiar de comidas.
-Permite gestionar **recetas**, **planificación semanal**, **inventario** y la **lista de compras** consolidada.
+# 🥗 Backend - Planificador Familiar de Comidas
+**Nombre comercial:** Che, ¿qué comemos?
 
----
-
-## 🚀 Objetivo del MVP
-
-- Planificar comidas semanales (almuerzo/cena).
-- Cargar recetas manualmente y consultarlas.
-- Mantener un inventario básico de ingredientes.
-- Generar una lista de compras consolidada en base al plan y el inventario.
+API REST construida con **FastAPI** para el MVP del planificador familiar de comidas. Permite gestionar recetas, planificación semanal, inventario y lista de compras consolidada.
 
 ---
 
-## ⚙️ Tecnologías
+## 🚀 Objetivo del Proyecto
 
-- [FastAPI](https://fastapi.tiangolo.com/) – framework backend
-- [Python 3.12+](https://www.python.org/)
-- [Uvicorn](https://www.uvicorn.org/) – servidor ASGI
-- [SQLite] – base de datos predeterminada para MVP (local; vive fuera de este repo)
-- [SQLModel](https://sqlmodel.tiangolo.com/) – ORM para gestionar la capa de datos
-- [Alembic](https://alembic.sqlalchemy.org/) – migraciones de esquema versionadas
-- [Pytest](https://docs.pytest.org/) – framework de pruebas unitarias e integrales
-- [Docker] (opcional, para despliegue)
+* Planificar comidas semanales (almuerzo/cena)
+* Cargar y consultar recetas manualmente
+* Mantener inventario básico de ingredientes
+* Generar lista de compras consolidada según el plan y el inventario
 
 ---
 
-## 📂 Estructura (propuesta)
+## ⚙️ Stack Tecnológico
+
+* **FastAPI** (backend, API REST)
+* **Python 3.12+**
+* **Uvicorn** (servidor ASGI)
+* **SQLite** (base de datos local por defecto)
+* **SQLModel** (ORM)
+* **Alembic** (migraciones de esquema)
+* **Pytest** (pruebas unitarias e integrales)
+* **Docker** (opcional para despliegue)
+
+---
+
+## 🏗️ Arquitectura y Estructura
+
+El proyecto sigue una estructura modular bajo la carpeta `app/`:
 
 ```text
 backend/
 ├─ app/
-│  ├─ main.py        # Punto de entrada. Crea la aplicación FastAPI, monta routers y arranca el servidor.
-│  │
-│  ├─ core/          # Elementos comunes e infraestructura.
-│  │                 # Configuración general (variables, conexión DB).
-│  │                 # Sesión de base de datos (ciclo de vida por request).
-│  │
-│  ├─ api/           # Capa de exposición HTTP.
-│  │                 # Contiene routers de los recursos.
-│  │                 # Solo definen endpoints, validaciones de entrada/salida y códigos de respuesta.
-│  │                 # No contienen lógica de negocio ni SQL.
-│  │
-│  ├─ services/      # Capa de lógica de negocio.
-│  │                 # Funciones que aplican reglas y coordinan operaciones.
-│  │                 # Llaman a repositorios o directamente a los modelos.
-│  │                 # Mantienen las reglas independientes del protocolo HTTP.
-│  │
-│  ├─ models/        # Capa de persistencia (ORM).
-│  │                 # Tablas y relaciones definidas en SQLAlchemy.
-│  │                 # No contienen reglas de negocio, solo estructura de datos.
-│  │
-│  └─ schemas/       # Capa de contratos de datos.
-│                    # Definiciones de entrada/salida con Pydantic.
-│                    # Diferencian entre crear/actualizar/mostrar.
-│
-├─ alembic/          # Migraciones versionadas de esquema de base de datos.
-├─ alembic.ini       # Configuración de Alembic.
-│
-└─ tests/            # Pruebas automáticas.
-    ├─ unit/         # Pruebas de servicios sin levantar servidor.
-    └─ integration/  # Pruebas de endpoints a través de la API.
+│  ├─ main.py        # Punto de entrada. Instancia FastAPI y monta routers.
+│  ├─ core/          # Configuración global, conexión y sesión de base de datos.
+│  ├─ api/           # Routers/endpoints HTTP. Sin lógica de negocio ni SQL.
+│  ├─ services/      # Lógica de negocio y coordinación de operaciones.
+│  ├─ models/        # Entidades ORM SQLModel y contratos API.
+│  └─ schemas/       # Modelos Pydantic para entrada/salida.
+├─ alembic/          # Migraciones de base de datos.
+├─ alembic.ini       # Configuración Alembic.
+└─ tests/            # Pruebas automáticas (unitarias/integración).
 ```
+
+**Migraciones:**
+* Generar: `alembic revision --autogenerate -m "mensaje"`
+* Aplicar: `alembic upgrade head`
+
+**Pruebas:**
+* Ejecutar: `pytest` (usar subcarpetas para granularidad)
+
+---
+
+## 🧑‍💻 Getting Started
+
+```bash
+# Clonar el repositorio
+git clone <url_repo>
+cd backend
+
+# Crear entorno virtual
+python -m venv .venv
+source .venv/bin/activate   # Linux/Mac
+.venv\Scripts\activate      # Windows
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar servidor
+uvicorn app.main:app --reload
+```
+
+Documentación interactiva disponible en:
+[http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+## 📅 Endpoints Principales (MVP)
+
+### Planificación
+* `GET /plan` → obtener planificación semanal
+* `POST /plan` → crear/actualizar comidas para un día (almuerzo/cena)
+* `DELETE /plan/{day}/{meal}` → borrar comida planificada
+
+### Recetas
+* `GET /recipes` → listar recetas
+* `POST /recipes` → crear receta (manual)
+* `GET /recipes/{id}` → detalle de receta
+* `PUT /recipes/{id}` → editar receta
+* `DELETE /recipes/{id}` → eliminar receta
+
+### Inventario
+* `GET /inventory` → listar ingredientes (con cantidades/unidades)
+* `POST /inventory` → agregar ingrediente
+* `PUT /inventory/{id}` → actualizar cantidad/estado (consumido/repuesto)
+* `DELETE /inventory/{id}` → eliminar ingrediente
+
+### Lista de compras
+* `GET /shopping-list` → generar lista consolidada desde plan + inventario
+
+---
+
+## 🧪 Testing
+
+* Pruebas automáticas con **Pytest**
+* Fixtures SQLite en memoria para lógica con BD
+* Cobertura mínima recomendada: 80%
+
+---
+
+## 📝 Convenciones y Contribución
+
+* **Estilo de código:** PEP 8, docstrings PEP 257, anotaciones de tipo
+* **Commits:** formato convencional (`feat`, `fix`, `docs`, etc.), línea de asunto ≤72 caracteres
+* **Pruebas:** unitarias en `tests/unit/`, integración en `tests/integration/`
+* **Revisiones:** revisa y documenta cambios antes de fusionar
+
+---
+
+## ⚠️ Notas y Limitaciones
+
+* MVP sin multiusuario familiar (un usuario/familia)
+* Simplificación de unidades y validación de datos iniciales
+* Inventario inicial depende del usuario
+
+---
+
+## 📚 Referencias y Archivos Clave
+
+* `app/main.py`, `app/api/`, `app/services/`, `alembic/`, `tests/`
+* Consulta `AGENTS.md` y `.github/instructions/` para detalles técnicos y convenciones
+
 
 ## 📅 Endpoints (MVP)
 
