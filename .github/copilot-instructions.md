@@ -7,7 +7,7 @@
 - Incluir ejemplos de uso en la documentación.
 - Mantener la coherencia en los nombres de las variables y funciones.
 - Realizar revisiones de código antes de fusionar cambios.
-- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir.
+- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir a menos que te soliciten especificamente.
 
 ## Arquitectura y Estructura
 - Proyecto backend FastAPI para planificador familiar de comidas ("Che, ¿qué comemos?").

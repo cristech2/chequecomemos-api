@@ -1,170 +1,234 @@
 {
-  "info": {
-    "_postman_id": "planificador-comidas-api-collection",
-    "name": "Planificador_Comidas_API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": "Colección de endpoints actuales para el planificador de comidas."
-  },
-  "item": [
-    {
-      "name": "Registrar usuario",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"email\": \"usuario.prueba@email.com\",\n  \"full_name\": \"Usuario Prueba\",\n  \"family_name\": \"Familia Prueba\",\n  \"password\": \"12345678\"\n}"
+    "info": {
+        "name": "chequecomemos_api",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": "Colección de pruebas para la API de Che, ¿qué comemos?"
+    },
+    "item": [
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "Crear categoría",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Carnes\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/categories/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar categorías",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/categories/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener categoría por ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/categories/{{category_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                "{{category_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
         },
-        "url": {
-          "raw": "{{base_url}}/v1/users/",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "users",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Obtener usuario por email",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/v1/users/{{user_email}}",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "users",
-            "{{user_email}}"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Modificar usuario",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"full_name\": \"Nuevo Nombre\",\n  \"family_name\": \"Nueva Familia\"\n}"
+        {
+            "name": "Ingredients",
+            "item": [
+                {
+                    "name": "Crear ingrediente",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Pollo\",\n  \"category_id\": \"{{category_id}}\",\n  \"default_unit\": \"kg\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ingredients/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ingredients",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener ingrediente por ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/ingredients/{{ingredient_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ingredients",
+                                "{{ingredient_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar ingrediente",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Pollo\",\n  \"category_id\": \"{{category_id}}\",\n  \"default_unit\": \"kg\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ingredients/{{ingredient_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ingredients",
+                                "{{ingredient_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Eliminar ingrediente",
+                    "request": {
+                        "method": "DELETE",
+                        "url": {
+                            "raw": "{{base_url}}/ingredients/{{ingredient_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ingredients",
+                                "{{ingredient_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
         },
-        "url": {
-          "raw": "{{base_url}}/v1/users/{{user_email}}",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "users",
-            "{{user_email}}"
-          ]
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Registrar usuario",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"usuario@ejemplo.com\",\n  \"full_name\": \"Juan Pérez\",\n  \"family_name\": \"Pérez\",\n  \"password\": \"123456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/users/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Obtener usuario por email",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/users/{{user_email}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "{{user_email}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Actualizar usuario",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"full_name\": \"Juan Pérez\",\n  \"family_name\": \"Pérez\",\n  \"password\": \"nuevo_password\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/users/{{user_email}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "{{user_email}}"
+                            ]
+                        }
+                    }
+                }
+            ]
         }
-      },
-      "response": []
-    },
-    {
-      "name": "Crear categoría",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Carnes\"\n}"
-        },
-        "url": {
-          "raw": "{{base_url}}/v1/categories/",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "categories",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Listar todas las categorías",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/v1/categories/",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "categories",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Obtener categoría por ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/v1/categories/{{category_id}}",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "categories",
-            "{{category_id}}"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Eliminar categoría por ID",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{base_url}}/v1/categories/{{category_id}}",
-          "host": [
-            "{{base_url}}"
-          ],
-          "path": [
-            "v1",
-            "categories",
-            "{{category_id}}"
-          ]
-        }
-      },
-      "response": []
-    }
-  ]
+    ]
 }
