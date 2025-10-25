@@ -28,6 +28,9 @@ class Ingredients(IngredientsBase, table=True):
         primary_key=True,
         unique=True,
     )
+    category_id: uuid.UUID = Field(
+        default_factory=uuid.uuid4, foreign_key="categories.category_id"
+    )
     category: "Categories" = Relationship(back_populates="ingredients")
 
 
@@ -53,5 +56,5 @@ class IngredientResponse(IngredientsBase):
     Incluye el id y la relación con la categoría.
     """
 
-    id: uuid.UUID
+    ingredient_id: uuid.UUID
     category: Categories | None = None
