@@ -7,7 +7,8 @@
 - Incluir ejemplos de uso en la documentación.
 - Mantener la coherencia en los nombres de las variables y funciones.
 - Realizar revisiones de código antes de fusionar cambios.
-- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir a menos que te soliciten especificamente.
+- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir a menos que te soliciten explicitamente con la frase "Genera el codigo" o "Escribe el codigo".
+- Mantener la coherencia en los nombres de las variables y funciones.
 
 ## Arquitectura y Estructura
 - Proyecto backend FastAPI para planificador familiar de comidas ("Che, ¿qué comemos?").
@@ -16,8 +17,7 @@
   - `core/`: configuración global, conexión y sesión de base de datos.
   - `api/`: define routers/endpoints HTTP, sin lógica de negocio ni SQL.
   - `services/`: lógica de negocio, reglas y coordinación de operaciones.
-  - `models/`: entidades ORM SQLAlchemy, solo estructura de datos.
-  - `schemas/`: modelos Pydantic para entrada/salida, diferenciando crear/actualizar/mostrar.
+  - `models/`: entidades ORM SQLModels, clases de entidades de la base y contratos entrada y salida de la API.
 - Migraciones de base de datos en `alembic/` y configuración en `alembic.ini`.
 - Pruebas automáticas en `tests/` (unitarias en `unit/`, integración en `integration/`).
 
@@ -31,7 +31,10 @@
   - Aplicar: `alembic upgrade head`
 
 ## Convenciones y Patrones
-- Commits: Conventional Commits (`feat`, `fix`, `docs`, etc.), resumen ≤72 caracteres, cuerpo opcional.
+- Commits: Conventional Commits (`feat`, `fix`, `docs`, etc.), resumen ≤72 caracteres, cuerpo opcional. analizar cambios y razones y elegir el tipo adecuado.
+- Código Python: PEP 8, docstrings PEP 257, anotaciones de tipo (aprovechar Annotated siempre que sea posible en las funciones), manejo de excepciones claro.
+- Bases de datos: SQLModel ORM, migraciones con Alembic.
+- API: RESTful, uso adecuado de métodos HTTP y códigos de estado.
 - Endpoints RESTful claros, ver ejemplos en README.
 
 ## Integraciones y Dependencias
