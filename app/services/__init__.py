@@ -4,6 +4,12 @@ from .categories_service import (
     get_categories,
     get_category,
 )
+from .ingredients_service import (
+    create_ingredient,
+    delete_ingredient,
+    get_ingredient,
+    update_ingredient,
+)
 from .user_service import create_user, get_user_by_email, update_user
 
 __all__ = [
@@ -14,4 +20,8 @@ __all__ = [
     "get_category",
     "get_categories",
     "delete_category",
+    "create_ingredient",
+    "get_ingredient",
+    "update_ingredient",
+    "delete_ingredient",
 ]
