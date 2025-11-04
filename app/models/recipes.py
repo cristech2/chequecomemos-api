@@ -12,9 +12,12 @@ from sqlmodel import (
     SQLModel,
 )
 
+from .ingredients import IngredientsBase
+from .recipe_ingredients import RecipeIngredientsBase, RecipeIngredientsResponse
+
 # evitar importación circular en la comprobación de tipos
 if TYPE_CHECKING:
-    from .recipe_ingredients import ListRecipeIngredientsRead, RecipeIngredients
+    from .recipe_ingredients import RecipeIngredients
     from .users import Users
 
 
@@ -44,8 +47,8 @@ class Recipes(RecipesBase, table=True):
     owner_id: uuid.UUID = Field(foreign_key="users.id")
     servings: int | None = Field(default=1)
     visibility: RecipeVisibility = Field(default=RecipeVisibility.PUBLIC)
-    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
-    update_at: datetime = Field(default_factory=datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
+    update_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
 
     owner: "Users" = Relationship(back_populates="recipes")
     recipe_ingredients: list["RecipeIngredients"] = Relationship(
@@ -53,10 +56,19 @@ class Recipes(RecipesBase, table=True):
     )
 
 
+class RecipeIngredientsCreateInput(RecipeIngredientsBase, IngredientsBase):
+    """Contrato para crear un ingrediente de receta dentro de una receta.
+    Combina los campos necesarios de RecipeIngredientsBase e IngredientsBase.
+    Sobreescribe el campo 'name' para que sea opcional."""
+
+    ingredient_id: uuid.UUID | None = None
+    name: str | None = None  # pyright: ignore[reportIncompatibleVariableOverride]
+
+
 class RecipesCreate(RecipesBase):
     """Contrato para crear una receta."""
 
-    pass
+    ingredients: list[RecipeIngredientsCreateInput]
 
 
 class RecipesUpdate(SQLModel):
@@ -69,6 +81,7 @@ class RecipesUpdate(SQLModel):
     prep_time: int | None = None  # en minutos
     servings: int | None = None  # n de porciones
     visibility: RecipeVisibility | None = None  # 'public' o 'private'
+    ingredients: list[RecipeIngredientsCreateInput]
 
 
 class RecipesResponse(RecipesBase):
@@ -78,4 +91,4 @@ class RecipesResponse(RecipesBase):
     owner_id: uuid.UUID
     created_at: datetime
     update_at: datetime
-    recipe_ingredients: "ListRecipeIngredientsRead"
+    recipe_ingredients: list["RecipeIngredientsResponse"]

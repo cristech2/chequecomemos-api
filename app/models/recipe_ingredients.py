@@ -12,6 +12,8 @@ from sqlmodel import (
     SQLModel,
 )
 
+from .ingredients import IngredientResponse
+
 # Para evitar importación circular en la comprobación de tiposx`x`
 if TYPE_CHECKING:
     from .ingredients import Ingredients
@@ -54,13 +56,7 @@ class RecipeIngredientsUpdate(SQLModel):
     optional: bool | None = None
 
 
-class RecipeIngredientsRead(RecipeIngredientsCreate):
-    """Modelo para leer la relación entre receta e ingrediente."""
+class RecipeIngredientsResponse(RecipeIngredientsBase):
+    """Contrato de respuesta para la relación entre recetas e ingredientes. permite incluir detalles del ingrediente."""
 
-    ingredient_id: uuid.UUID
-
-
-class ListRecipeIngredientsRead(SQLModel):
-    """Modelo para leer una lista de relaciones entre recetas e ingredientes."""
-
-    recipe_ingredients: list[RecipeIngredientsRead]
+    ingredient: IngredientResponse
