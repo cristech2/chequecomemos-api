@@ -60,8 +60,8 @@ This document outlines core principles, performance optimizations, quality pract
 
 * **Type Hints**:
     * Always use type hints (PEP 484/585/604) for all function parameters and return values.
-    * Use modern union types (e.g., `str | int`) and the `typing` module (e.g., `List[str]`, `Dict[str, int]`). do not use Optional from `typing` (e.g., `Optional[str]`).
-    * Use Annotated types (e.g., `Annotated[int, "positive integer"]`) for additional context allowing for better code understanding.
+    * Use modern union types (e.g., `str | int`) and the `typing` module (e.g., `List[str]`, `Dict[str, int]`).Don't use `Any` unless absolutely necessary. Don't use `Optional[T]`; use `T | None` instead.
+    * Always as posible, use Annotated Types (PEP 593) for more descriptive types (e.g., `Annotated[int, "User ID"]`).
     * Leverage `TypedDict` for dictionary structures and `Protocols` for duck typing.
 * **Docstrings**:
     * Provide docstrings following **PEP 257** conventions for all public modules, functions, classes, and methods.
