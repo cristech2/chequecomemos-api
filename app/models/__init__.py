@@ -10,6 +10,18 @@ from .ingredients import (  # noqa: F401
     Ingredients,
     IngredientUpdate,
 )
+from .recipe_ingredients import (  # noqa: F401
+    RecipeIngredients,
+    RecipeIngredientsCreate,
+    RecipeIngredientsResponse,
+    RecipeIngredientsUpdate,
+)
+from .recipes import (  # noqa: F401
+    Recipes,
+    RecipesCreate,
+    RecipesResponse,
+    RecipesUpdate,
+)
 from .users import UserCreate, UserResponse, Users, UserUpdate  # noqa: F401
 
 __all__ = [
@@ -25,4 +37,12 @@ __all__ = [
     "IngredientCreate",
     "IngredientResponse",
     "IngredientUpdate",
+    "Recipes",
+    "RecipesCreate",
+    "RecipesUpdate",
+    "RecipesResponse",
+    "RecipeIngredients",
+    "RecipeIngredientsCreate",
+    "RecipeIngredientsUpdate",
+    "RecipeIngredientsResponse",
 ]

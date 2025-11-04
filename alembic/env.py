@@ -6,9 +6,13 @@ from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
-from app.models.categories import Categories  # noqa: F401
-from app.models.ingredients import Ingredients  # noqa: F401
-from app.models.users import Users  # noqa: F401
+from app.models import (  # noqa: F401
+    CategoryDB,
+    Ingredients,
+    RecipeIngredients,
+    Recipes,
+    Users,
+)
 
 load_dotenv()
 
