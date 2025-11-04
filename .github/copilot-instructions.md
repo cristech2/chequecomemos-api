@@ -7,7 +7,6 @@
 - Incluir ejemplos de uso en la documentación.
 - Mantener la coherencia en los nombres de las variables y funciones.
 - Realizar revisiones de código antes de fusionar cambios.
-- Cuando se interactura en el chat no generar directamente el codigo, sino sugerirlo en formato de guias o pasos a seguir a menos que te soliciten explicitamente con la frase "Genera el codigo" o "Escribe el codigo".
 - Mantener la coherencia en los nombres de las variables y funciones.
 
 ## Arquitectura y Estructura
@@ -22,10 +21,10 @@
 - Pruebas automáticas en `tests/` (unitarias en `unit/`, integración en `integration/`).
 
 ## Flujos de Desarrollo
-- Crear entorno virtual: `python -m venv .venv && source .venv/bin/activate`
-- Instalar dependencias: `pip install -r requirements.txt`
-- Ejecutar servidor: `uvicorn app.main:app --reload`
-- Ejecutar pruebas: `pytest` (usar subcarpetas para granularidad)
+- Crear entorno virtual: `uv venv .venv && source .venv/bin/activate`
+- Instalar dependencias: `uv pip install ".[dev]"` (incluye FastAPI, SQLModel, Alembic, Pytest)
+- Ejecutar servidor: `uv run fastapi dev`
+- Ejecutar pruebas: `uv run pytest` (usar subcarpetas para granularidad)
 - Migraciones Alembic:
   - Generar: `alembic revision --autogenerate -m "mensaje"`
   - Aplicar: `alembic upgrade head`
