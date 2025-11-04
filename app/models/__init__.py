@@ -11,10 +11,9 @@ from .ingredients import (  # noqa: F401
     IngredientUpdate,
 )
 from .recipe_ingredients import (  # noqa: F401
-    ListRecipeIngredientsRead,
     RecipeIngredients,
     RecipeIngredientsCreate,
-    RecipeIngredientsRead,
+    RecipeIngredientsResponse,
     RecipeIngredientsUpdate,
 )
 from .recipes import (  # noqa: F401
@@ -45,6 +44,5 @@ __all__ = [
     "RecipeIngredients",
     "RecipeIngredientsCreate",
     "RecipeIngredientsUpdate",
-    "RecipeIngredientsRead",
-    "ListRecipeIngredientsRead",
+    "RecipeIngredientsResponse",
 ]
