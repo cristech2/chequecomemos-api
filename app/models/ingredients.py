@@ -1,6 +1,7 @@
 """Modelo para la tabla ingredients y contrato para el cliente y la respuesta del servidor."""
 
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlmodel import (
     Field,  # pyright: ignore[reportUnknownVariableType]
@@ -8,7 +9,10 @@ from sqlmodel import (
     SQLModel,
 )
 
-from .categories import Categories
+from .categories import Categories, CategorieSingleResponse
+
+if TYPE_CHECKING:
+    from app.models.recipe_ingredients import RecipeIngredients
 
 
 class IngredientsBase(SQLModel):
@@ -32,6 +36,9 @@ class Ingredients(IngredientsBase, table=True):
         default_factory=uuid.uuid4, foreign_key="categories.category_id"
     )
     category: "Categories" = Relationship(back_populates="ingredients")
+    recipe_ingredients: list["RecipeIngredients"] = Relationship(
+        back_populates="ingredient"
+    )
 
 
 class IngredientCreate(IngredientsBase):
@@ -57,4 +64,4 @@ class IngredientResponse(IngredientsBase):
     """
 
     ingredient_id: uuid.UUID
-    category: Categories | None = None
+    category: "CategorieSingleResponse"
