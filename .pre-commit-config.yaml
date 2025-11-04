@@ -11,7 +11,7 @@ repos:
   - id: detect-private-key  # Previene incluir claves privadas accidentales.
   # Integración con ruff para linting y formateo de código Python.
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.13.1
+  rev: v0.14.3
   hooks:
   - id: ruff  # Ejecuta ruff y aplica fixes automáticos cuando es posible.
     args: [--fix]

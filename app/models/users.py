@@ -4,12 +4,17 @@ import uuid
 
 # Importar la base de datos desde la configuración
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from pydantic import EmailStr
 from sqlmodel import (
     Field,  # pyright: ignore[reportUnknownVariableType]
+    Relationship,
     SQLModel,
 )
+
+if TYPE_CHECKING:
+    from app.models.recipes import Recipes
 
 
 class UserBase(SQLModel):
@@ -43,6 +48,8 @@ class Users(UserBase, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
     # Fecha de actualización del registro.
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))  # type: ignore  # noqa: UP017
+
+    recipes: list["Recipes"] = Relationship(back_populates="owner")
 
 
 class UserCreate(UserBase):
